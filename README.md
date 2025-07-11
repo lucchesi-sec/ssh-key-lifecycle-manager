@@ -1,6 +1,6 @@
 # SSH Key Rotation Script
 
-![Bash](https://img.shields.io/badge/Shell-Bash-green) ![Linux](https://img.shields.io/badge/Platform-Linux-yellow) ![Security](https://img.shields.io/badge/Focus-Key%20Management-red) ![License](https://img.shields.io/badge/License-MIT-blue)
+![Bash](https://img.shields.io/badge/Shell-Bash-blue) ![Linux](https://img.shields.io/badge/Platform-Linux-orange) ![Security](https://img.shields.io/badge/Focus-Key%20Management-red) ![License](https://img.shields.io/badge/License-MIT-green) ![Version](https://img.shields.io/badge/Version-2.0.0-purple)
 
 An automated script for safely rotating SSH keypairs on remote Linux servers with comprehensive safety features and audit logging. This tool demonstrates security automation best practices for credential management and access control.
 
