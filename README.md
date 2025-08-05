@@ -50,10 +50,11 @@ graph TD
 -   Network connectivity from the local machine to the remote server on the SSH port.
 
 ## Usage
-
 ```bash
-./rotate-ssh-key.sh <remote_user> <remote_host>
+./rotate-ssh-key.sh <remote_user> <remote_host> [path_to_old_public_key]
 ```
+The script will prompt for confirmation before starting the rotation process.
+
 
 Example:
 ```bash
@@ -61,7 +62,15 @@ Example:
 ```
 
 ### Log Level Configuration
-You can set the log level using the `SSH_KEY_ROTATION_LOG_LEVEL` environment variable:
+The script is configured via the `config.sh` file.
+The following variables can be customized:
+- `KEY_DIR`: Directory to store rotated keys
+- `LOG_FILE`: Path to the log file
+- `OLD_KEYS_FILE_PATH`: Path to the file containing old public keys to remove
+- `KEY_TYPE`: SSH key type (e.g., `rsa`, `ed25519`)
+- `KEY_BITS`: SSH key bits (for RSA keys)
+- `DEFAULT_LOG_LEVEL`: Default log level (`DEBUG`, `INFO`, `SUCCESS`, `WARNING`, `ERROR`)
+
 
 ```bash
 # Available log levels: DEBUG, INFO, SUCCESS, WARNING, ERROR
@@ -109,12 +118,13 @@ Do you want to remove the old key? [y/N]:
 ![SSH Key Rotation Output](screenshots/key-rotation-success.png)
 
 
-## Notes
+## 📝 Notes
+- The script now uses a `config.sh` file for all configuration.
+- A confirmation prompt has been added before key rotation begins.
+- The `find_and_remove_key_on_remote` function has been simplified for efficiency.
+- The script now supports both `rsa` and `ed25519` key types.
 - Tested on Ubuntu 22.04.
-- Requires SSH access to the remote host with permissions to write to the `~/.ssh/authorized_keys` file for the specified remote user.
-- The script currently handles a single remote host. Multi-host support could be added in future versions.
-- Enhanced with structured logging with multiple log levels (DEBUG, INFO, SUCCESS, WARNING, ERROR).
-- Newly generated local SSH keypairs are stored in a subdirectory named `rotated-keys` within your local `~/.ssh/` directory (e.g., `~/.ssh/rotated-keys/id_rsa_rotated_YYYY-MM-DD_HH-MM-SS`).
+
 
 ## Log Levels
 The script supports different log levels for better visibility and troubleshooting:
@@ -133,25 +143,23 @@ The script supports different log levels for better visibility and troubleshooti
 - Key passphrase support with secure handling
 - Configurable key paths and naming conventions
 
-## Installation
-
-### Quick Start
-
+## 🚀 Quick Start
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/lucchesi-sec/ssh-key-lifecycle-manager.git
    cd ssh-key-lifecycle-manager
    ```
-
-2. **Make script executable:**
+2. **Configure the script:**
+   - Edit `config.sh` to set your desired key type, key bits, and paths.
+3. **Make the script executable:**
    ```bash
    chmod +x rotate-ssh-key.sh
    ```
-
-3. **Run the script:**
+4. **Run the script:**
    ```bash
-   ./rotate-ssh-key.sh <username> <hostname>
+   ./rotate-ssh-key.sh <remote_user> <remote_host>
    ```
+
 
 ### Advanced Setup
 
@@ -185,7 +193,7 @@ mkdir -p example-output
 
 1. **Regular Rotation Schedule**
    - Implement automated rotation every 90 days
-   - Use configuration management for enterprise deployment
+   - Use configuration management for advanced deployment
    - Monitor rotation success through audit logs
 
 2. **Access Control**
@@ -203,7 +211,7 @@ mkdir -p example-output
    - Integrate with SIEM systems
    - Generate compliance reports
 
-### Enterprise Deployment
+### Advanced Deployment
 
 ```bash
 # Example automation script
@@ -328,10 +336,11 @@ For support and questions:
 ## Changelog
 
 ### v2.0.0
-- Added multi-key cleanup from old-keys.txt
-- Enhanced logging system with configurable levels
-- Improved error handling and safety checks
-- Added comprehensive documentation
+- **Centralized Configuration**: All user-defined variables are now managed in `config.sh`.
+- **Enhanced User Experience**: A confirmation prompt has been added to prevent accidental rotations.
+- **Simplified Key Removal**: The logic for finding and removing old keys has been streamlined.
+- **Improved Logging**: The logging system is now more robust and easier to read.
+
 
 ### v1.0.0
 - Initial release with basic key rotation
